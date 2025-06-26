@@ -18,6 +18,7 @@ function App() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState("");
   const [users, setUsers] = useState<string[]>([]);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const ws = useRef<WebSocket | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -150,7 +151,20 @@ function App() {
 
   return (
     <div className="app">
-      <div className="sidebar">
+      <button
+        className="menu-button"
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+        aria-label="Toggle menu"
+      >
+        ☰ Menu
+      </button>
+
+      <div
+        className={`overlay ${sidebarOpen ? "open" : ""}`}
+        onClick={() => setSidebarOpen(false)}
+      />
+
+      <div className={`sidebar ${sidebarOpen ? "open" : ""}`}>
         <div className="server-info">
           <h2>Chat Room</h2>
         </div>
@@ -213,6 +227,13 @@ function App() {
             onChange={(e) => setInputMessage(e.target.value)}
             className="message-input"
           />
+          <button
+            type="submit"
+            className="send-button"
+            disabled={!inputMessage.trim()}
+          >
+            Send
+          </button>
         </form>
       </div>
     </div>
